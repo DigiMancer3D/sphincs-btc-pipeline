@@ -18,6 +18,29 @@ It also supports **roles** (0–9), with role 0 considered master role and role 
 
 ## Setup
 
+### Recommended: One-command Setup (Easiest)
+
+The simplest way to prepare the project is to use the included `setup.sh` script:
+
+```bash
+# Clone the repository
+git clone https://github.com/DigiMancer3D/sphincs-btc-pipeline.git
+cd sphincs-btc-pipeline
+
+# Run the setup script
+./setup.sh
+```
+
+This script automatically:
+- Downloads the official SPHINCS+ reference code
+- Creates `prog1/` and `prog2/` folders
+- Copies all required reference files into both folders
+- Places our custom `main.c`, `Makefile`, `params.h`, `custom_params.h`, and `custom_params2.h` files in the correct locations
+
+### Manual Setup (Alternative)
+
+If you prefer to do it step-by-step:
+
 ```bash
 mkdir -p sphincs-btc-pipeline
 cd sphincs-btc-pipeline
@@ -33,12 +56,17 @@ cp -r ref-source/ref/* prog1/
 cp -r ref-source/ref/* prog2/
 ```
 
+---
+
 Download the following files into the folders listed:
 
-/prog1/ - `custom_params.h` and `prog1/main.c` (as `main.c`)
+/prog1/ - `custom_params.h`, `prog1/main.c` (as `main.c`)
 
-/prog2/ - `custom_params2.h` and `prog2/main.c` (as `main.c`)
+/prog2/ - `custom_params2.h`, `prog2/main.c` (as `main.c`)
 
+/sphincs-btc-pipeline/ - `setup.sh`, `run_multi_role_tests.sh`, `run_pipeline_tests.sh`
+
+---
 
 Then build:
 
@@ -48,6 +76,8 @@ make clean && make
 
 cd ~/sphincs-btc-pipeline/prog2
 make clean && make
+
+chmod +x setup.sh
 ```
 
 ---
@@ -96,7 +126,8 @@ All outputs go into nicely organized folders under `results/`.
 
 ## Useful Scripts
 
-- `run_multi_role_tests.sh`, Runs multiple seeds and all roles automatically (recommended for testing)
+- `./run_multi_role_tests.sh`, Runs multiple seeds and all roles automatically (recommended for testing)
+- `ls -l ~/sphincs-btc-pipeline/prog1/master_sk_role*.bin`, Display masters
 
 ---
 
