@@ -1,0 +1,4 @@
+#ifndef SPHINCS_PARAMS_H
+#define SPHINCS_PARAMS_H
+#define SPX_SLICE_BYTES 105
+#endif
