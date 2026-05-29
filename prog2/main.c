@@ -131,7 +131,7 @@ static void double_shake256(unsigned char *out, const unsigned char *in, size_t 
     shake256(out, 32, tmp, 32);
 }
 
-/* Correct Bitcoin Base58Check */
+/* Bitcoin Base58Check */
 static void real_btc_base58(const unsigned char *in25, char *address_out) {
     unsigned char digits[50] = {0};
     size_t digits_len = 0;
@@ -161,7 +161,7 @@ static void real_btc_base58(const unsigned char *in25, char *address_out) {
     address_out[leading] = '\0';
 }
 
-/* Updated: works for BOTH real BTC and shake + pq-checksum */
+/* Works for BOTH real BTC and shake + pq-checksum */
 static void payload_to_btc_address(const unsigned char *payload20, char *address_out, int use_real) {
     unsigned char extended[25];
     unsigned char checksum[32];
@@ -178,7 +178,7 @@ static void payload_to_btc_address(const unsigned char *payload20, char *address
     real_btc_base58(extended, address_out);
 }
 
-/* Legacy reductions (kept 100% intact) */
+/* Legacy reductions */
 static void parallel_xor_collapse(const unsigned char *in105, unsigned char out20[20]) {
     unsigned char temp[20];
     memset(out20, 0, 20);
@@ -208,7 +208,7 @@ static void iterated_sponge_chain(const unsigned char *in105, unsigned char out2
     explicit_bzero(state, 20);
 }
 
-/* New recommended reduction (domain-separated + sideways projection) */
+/* New reduction (domain-separated + sideways projection) */
 static void domain_separated_shake_reduce(const unsigned char *in105, unsigned char out20[20], uint32_t role) {
     unsigned char domain[32] = {0};
     const char *sep = "SPHINCS-BTC-PAYLOAD-v1";
@@ -261,7 +261,7 @@ int main(int argc, char **argv) {
     }
     fclose(f);
 
-    /* === MASTER / ROLELESS (legacy reductions) - kept exactly as before === */
+    /* === MASTER / ROLELESS (legacy reductions) === */
     unsigned char payload_parallel[20], payload_sponge[20];
     parallel_xor_collapse(raw105, payload_parallel);
     iterated_sponge_chain(raw105, payload_sponge);
@@ -276,7 +276,7 @@ int main(int argc, char **argv) {
 
     char path[256];
 
-    /* Parallel legacy file (updated labels) */
+    /* Parallel labels */
     snprintf(path, sizeof(path), "%s/btc_address_parallel.txt", out_dir);
     f = fopen(path, "w");
     fprintf(f, "=== MASTER / ROLELESS (Legacy Parallel XOR) ===\n");
@@ -287,7 +287,7 @@ int main(int argc, char **argv) {
     fprintf(f, "\n");
     fclose(f);
 
-    /* Sponge legacy file (updated labels) */
+    /* Sponge labels */
     snprintf(path, sizeof(path), "%s/btc_address_sponge.txt", out_dir);
     f = fopen(path, "w");
     fprintf(f, "=== MASTER / ROLELESS (Legacy Sponge Chain) ===\n");
@@ -327,7 +327,7 @@ int main(int argc, char **argv) {
     }
     fclose(f);
 
-    /* Proof files (legacy + master) - kept exactly as before */
+    /* Proof files (legacy + master) */
     unsigned char full_sig[CRYPTO_BYTES];
     unsigned long long sig_len;
 
