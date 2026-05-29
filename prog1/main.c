@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
 
     crypto_sign_keypair(pk, sk);
 
-    /* === NEW: Save full master secret key if requested === */
+    /* === Save full master secret key if requested === */
     if (save_master_key) {
         char sk_filename[256];
         snprintf(sk_filename, sizeof(sk_filename), "master_sk_role%u.bin", role);
